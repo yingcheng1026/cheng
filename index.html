@@ -3,97 +3,286 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>正能量金句网站</title>
+    <title>每日正能量金句</title>
     <style>
-        /* 这里可以添加CSS样式 */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f0f8ff;
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
             color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .container {
             max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+            margin: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        /* 添加更多样式... */
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        #quote-display {
+            font-size: 24px;
+            font-style: italic;
+            text-align: center;
+            margin: 20px 0;
+            color: #34495e;
+        }
+        button, input[type="text"], select {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #mood-history {
+            margin-top: 20px;
+            border-top: 1px solid #bdc3c7;
+            padding-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>每日正能量金句</h1>
-            <nav>
-                <ul>
-                    <li><a href="#home">首页</a></li>
-                    <li><a href="#search">搜索</a></li>
-                    <li><a href="#profile">个人中心</a></li>
-                    <li><a href="#challenge">金句挑战</a></li>
-                </ul>
-            </nav>
-        </header>
-
-        <main>
-            <section id="daily-quote">
-                <h2>今日金句</h2>
-                <div id="quote-display">
-                    <!-- 这里将通过JavaScript动态插入每日金句 -->
-                </div>
-                <button id="share-button">分享</button>
-                <button id="save-button">保存</button>
-            </section>
-
-            <section id="search">
-                <h2>搜索金句</h2>
-                <input type="text" id="search-input" placeholder="输入关键词...">
-                <button id="search-button">搜索</button>
-                <div id="search-results">
-                    <!-- 搜索结果将在这里显示 -->
-                </div>
-            </section>
-
-            <section id="mood-tracker">
-                <h2>情绪追踪</h2>
-                <select id="mood-select">
-                    <option value="">选择你的心情...</option>
-                    <option value="happy">开心</option>
-                    <option value="sad">难过</option>
-                    <option value="excited">兴奋</option>
-                    <option value="anxious">焦虑</option>
-                </select>
-                <button id="log-mood">记录</button>
-            </section>
-        </main>
-
-        <footer>
-            <p>&copy; 2023 正能量金句网站. 保留所有权利。</p>
-        </footer>
+        <h1>每日正能量金句</h1>
+        <div id="quote-display"></div>
+        <button id="new-quote">新的金句</button>
+        <input type="text" id="search-input" placeholder="搜索金句...">
+        <button id="search-button">搜索</button>
+        <select id="mood-select">
+            <option value="">选择你的心情...</option>
+            <option value="happy">开心</option>
+            <option value="sad">难过</option>
+            <option value="excited">兴奋</option>
+            <option value="anxious">焦虑</option>
+        </select>
+        <input type="text" id="mood-reason" placeholder="为什么有这种心情？">
+        <button id="log-mood">记录心情</button>
+        <div id="mood-history"></div>
     </div>
-
     <script>
-        // 这里将添加JavaScript代码来实现动态功能
-        document.addEventListener('DOMContentLoaded', function() {
-            // 示例：显示每日金句
-            const quoteDisplay = document.getElementById('quote-display');
-            quoteDisplay.textContent = "生活不是等待暴风雨过去，而是学会在雨中跳舞。";
+       <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日正能量金句</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        #quote-display {
+            font-size: 24px;
+            font-style: italic;
+            text-align: center;
+            margin: 20px 0;
+            color: #34495e;
+        }
+        button, input[type="text"], select {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #mood-history {
+            margin-top: 20px;
+            border-top: 1px solid #bdc3c7;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>每日正能量金句</h1>
+        <div id="quote-display"></div>
+        <button id="new-quote">新的金句</button>
+        <input type="text" id="search-input" placeholder="搜索金句...">
+        <button id="search-button">搜索</button>
+        <select id="mood-select">
+            <option value="">选择你的心情...</option>
+            <option value="happy">开心</option>
+            <option value="sad">难过</option>
+            <option value="excited">兴奋</option>
+            <option value="anxious">焦虑</option>
+        </select>
+        <input type="text" id="mood-reason" placeholder="为什么有这种心情？">
+        <button id="log-mood">记录心情</button>
+        <div id="mood-history"></div>
+    </div>
+    <script>
+        const quotes = [
+            "生活不是等待暴风雨过去，而是学会在雨中跳舞。",
+            "The greatest glory in living lies not in never falling, but in rising every time we fall. - Nelson Mandela",
+            "成功不是最终的，失败也不是致命的，重要的是继续前进的勇气。",
+            "It does not matter how slowly you go as long as you do not stop. - Confucius",
+            "每一个不曾起舞的日子，都是对生命的辜负。",
+            "The only way to do great work is to love what you do. - Steve Jobs",
+            "当你感到悲伤时，就去学习一些新东西吧。",
+            "Believe you can and you're halfway there. - Theodore Roosevelt",
+            "微笑着面对生活，生活也会微笑着面对你。",
+            "Your time is limited, don't waste it living someone else's life. - Steve Jobs"
+        ];
 
-            // 示例：搜索功能
-            const searchButton = document.getElementById('search-button');
-            searchButton.addEventListener('click', function() {
-                const searchInput = document.getElementById('search-input');
-                const searchResults = document.getElementById('search-results');
-                searchResults.textContent = `搜索结果将显示在这里：${searchInput.value}`;
-            });
+        const quoteDisplay = document.getElementById('quote-display');
+        const newQuoteButton = document.getElementById('new-quote');
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const moodSelect = document.getElementById('mood-select');
+        const moodReason = document.getElementById('mood-reason');
+        const logMoodButton = document.getElementById('log-mood');
+        const moodHistory = document.getElementById('mood-history');
 
-            // 示例：情绪记录功能
-            const logMoodButton = document.getElementById('log-mood');
-            logMoodButton.addEventListener('click', function() {
-                const moodSelect = document.getElementById('mood-select');
-                alert(`你的心情已记录：${moodSelect.value}`);
-            });
+        function displayRandomQuote() {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            quoteDisplay.textContent = randomQuote;
+        }
 
-            // 这里可以添加更多功能实现...
-        });
+        function searchQuotes() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const matchedQuotes = quotes.filter(quote => quote.toLowerCase().includes(searchTerm));
+            if (matchedQuotes.length > 0) {
+                quoteDisplay.textContent = matchedQuotes[0];
+            } else {
+                quoteDisplay.textContent = "没有找到匹配的金句。";
+            }
+        }
+
+        function logMood() {
+            const mood = moodSelect.value;
+            const reason = moodReason.value;
+            if (mood && reason) {
+                const date = new Date();
+                const moodLog = `${date.toLocaleString()} - 心情：${mood}，原因：${reason}`;
+                let moodLogs = JSON.parse(localStorage.getItem('moodLogs')) || [];
+                moodLogs.push(moodLog);
+                localStorage.setItem('moodLogs', JSON.stringify(moodLogs));
+                updateMoodHistory();
+                moodSelect.value = '';
+                moodReason.value = '';
+            } else {
+                alert('请选择心情并填写原因。');
+            }
+        }
+
+        function updateMoodHistory() {
+            const moodLogs = JSON.parse(localStorage.getItem('moodLogs')) || [];
+            moodHistory.innerHTML = '<h3>心情历史记录</h3>' + moodLogs.map(log => `<p>${log}</p>`).join('');
+        }
+
+        newQuoteButton.addEventListener('click', displayRandomQuote);
+        searchButton.addEventListener('click', searchQuotes);
+        logMoodButton.addEventListener('click', logMood);
+
+        displayRandomQuote();
+        updateMoodHistory();
+    </script>
+</body>
+</html>
+
+        const quoteDisplay = document.getElementById('quote-display');
+        const newQuoteButton = document.getElementById('new-quote');
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const moodSelect = document.getElementById('mood-select');
+        const moodReason = document.getElementById('mood-reason');
+        const logMoodButton = document.getElementById('log-mood');
+        const moodHistory = document.getElementById('mood-history');
+
+        function displayRandomQuote() {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            quoteDisplay.textContent = randomQuote;
+        }
+
+        function searchQuotes() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const matchedQuotes = quotes.filter(quote => quote.toLowerCase().includes(searchTerm));
+            if (matchedQuotes.length > 0) {
+                quoteDisplay.textContent = matchedQuotes[0];
+            } else {
+                quoteDisplay.textContent = "没有找到匹配的金句。";
+            }
+        }
+
+        function logMood() {
+            const mood = moodSelect.value;
+            const reason = moodReason.value;
+            if (mood && reason) {
+                const date = new Date();
+                const moodLog = `${date.toLocaleString()} - 心情：${mood}，原因：${reason}`;
+                let moodLogs = JSON.parse(localStorage.getItem('moodLogs')) || [];
+                moodLogs.push(moodLog);
+                localStorage.setItem('moodLogs', JSON.stringify(moodLogs));
+                updateMoodHistory();
+                moodSelect.value = '';
+                moodReason.value = '';
+            } else {
+                alert('请选择心情并填写原因。');
+            }
+        }
+
+        function updateMoodHistory() {
+            const moodLogs = JSON.parse(localStorage.getItem('moodLogs')) || [];
+            moodHistory.innerHTML = '<h3>心情历史记录</h3>' + moodLogs.map(log => `<p>${log}</p>`).join('');
+        }
+
+        newQuoteButton.addEventListener('click', displayRandomQuote);
+        searchButton.addEventListener('click', searchQuotes);
+        logMoodButton.addEventListener('click', logMood);
+
+        displayRandomQuote();
+        updateMoodHistory();
     </script>
 </body>
 </html>
