@@ -87,94 +87,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>每日正能量金句</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
-            color: #333;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-        }
-        #quote-display {
-            font-size: 24px;
-            font-style: italic;
-            text-align: center;
-            margin: 20px 0;
-            color: #34495e;
-        }
-        button, input[type="text"], select {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            background-color: #3498db;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        #mood-history {
-            margin-top: 20px;
-            border-top: 1px solid #bdc3c7;
-            padding-top: 20px;
-        }
+        /* 您的CSS样式 */
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>每日正能量金句</h1>
-        <div id="quote-display"></div>
-        <button id="new-quote">新的金句</button>
-        <input type="text" id="search-input" placeholder="搜索金句...">
-        <button id="search-button">搜索</button>
-        <select id="mood-select">
-            <option value="">选择你的心情...</option>
-            <option value="happy">开心</option>
-            <option value="sad">难过</option>
-            <option value="excited">兴奋</option>
-            <option value="anxious">焦虑</option>
-        </select>
-        <input type="text" id="mood-reason" placeholder="为什么有这种心情？">
-        <button id="log-mood">记录心情</button>
-        <div id="mood-history"></div>
-    </div>
-    <script>
-        const quotes = [
-            "生活不是等待暴风雨过去，而是学会在雨中跳舞。",
-            "The greatest glory in living lies not in never falling, but in rising every time we fall. - Nelson Mandela",
-            "成功不是最终的，失败也不是致命的，重要的是继续前进的勇气。",
-            "It does not matter how slowly you go as long as you do not stop. - Confucius",
-            "每一个不曾起舞的日子，都是对生命的辜负。",
-            "The only way to do great work is to love what you do. - Steve Jobs",
-            "当你感到悲伤时，就去学习一些新东西吧。",
-            "Believe you can and you're halfway there. - Theodore Roosevelt",
-            "微笑着面对生活，生活也会微笑着面对你。",
-            "Your time is limited, don't waste it living someone else's life. - Steve Jobs"
-        ];
+    <h1>每日正能量金句</h1>
+    <div id="quote-display"></div>
+    <button id="new-quote">新的金句</button>
+    <input type="text" id="search-input" placeholder="搜索金句...">
+    <button id="search-button">搜索</button>
+    <select id="mood-select">
+        <option value="">选择你的心情...</option>
+        <option value="happy">开心</option>
+        <option value="sad">难过</option>
+        <option value="excited">兴奋</option>
+        <option value="anxious">焦虑</option>
+    </select>
+    <input type="text" id="mood-reason" placeholder="为什么有这种心情？">
+    <button id="log-mood">记录心情</button>
+    <div id="mood-history"></div>
 
+    <script>
+        // 第一个script标签的内容
         const quoteDisplay = document.getElementById('quote-display');
         const newQuoteButton = document.getElementById('new-quote');
         const searchInput = document.getElementById('search-input');
@@ -184,16 +118,34 @@
         const logMoodButton = document.getElementById('log-mood');
         const moodHistory = document.getElementById('mood-history');
 
+        let quotes = []; // 将存储所有的金句
+
+        async function loadQuotes() {
+            try {
+                const response = await fetch('quotes.json');
+                quotes = await response.json();
+                displayRandomQuote();
+            } catch (error) {
+                console.error('加载金句失败:', error);
+                quotes = [{ text: "生活不是等待暴风雨过去，而是学会在雨中跳舞。", from: "Unknown" }];
+            }
+        }
+
         function displayRandomQuote() {
+            if (quotes.length === 0) return;
             const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            quoteDisplay.textContent = randomQuote;
+            quoteDisplay.textContent = `${randomQuote.text} - ${randomQuote.from}`;
         }
 
         function searchQuotes() {
             const searchTerm = searchInput.value.toLowerCase();
-            const matchedQuotes = quotes.filter(quote => quote.toLowerCase().includes(searchTerm));
+            const matchedQuotes = quotes.filter(quote => 
+                quote.text.toLowerCase().includes(searchTerm) || 
+                quote.from.toLowerCase().includes(searchTerm)
+            );
             if (matchedQuotes.length > 0) {
-                quoteDisplay.textContent = matchedQuotes[0];
+                const randomMatch = matchedQuotes[Math.floor(Math.random() * matchedQuotes.length)];
+                quoteDisplay.textContent = `${randomMatch.text} - ${randomMatch.from}`;
             } else {
                 quoteDisplay.textContent = "没有找到匹配的金句。";
             }
@@ -221,11 +173,13 @@
             moodHistory.innerHTML = '<h3>心情历史记录</h3>' + moodLogs.map(log => `<p>${log}</p>`).join('');
         }
 
+        // 第二个script标签的内容
         newQuoteButton.addEventListener('click', displayRandomQuote);
         searchButton.addEventListener('click', searchQuotes);
         logMoodButton.addEventListener('click', logMood);
 
-        displayRandomQuote();
+        // 页面加载时执行
+        loadQuotes();
         updateMoodHistory();
     </script>
 </body>
