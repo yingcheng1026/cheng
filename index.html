@@ -80,35 +80,6 @@
         <div id="mood-history"></div>
     </div>
     <script>
-       <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>每日正能量金句</title>
-    <style>
-        /* 您的CSS样式 */
-    </style>
-</head>
-<body>
-    <h1>每日正能量金句</h1>
-    <div id="quote-display"></div>
-    <button id="new-quote">新的金句</button>
-    <input type="text" id="search-input" placeholder="搜索金句...">
-    <button id="search-button">搜索</button>
-    <select id="mood-select">
-        <option value="">选择你的心情...</option>
-        <option value="happy">开心</option>
-        <option value="sad">难过</option>
-        <option value="excited">兴奋</option>
-        <option value="anxious">焦虑</option>
-    </select>
-    <input type="text" id="mood-reason" placeholder="为什么有这种心情？">
-    <button id="log-mood">记录心情</button>
-    <div id="mood-history"></div>
-
-    <script>
-        // 第一个script标签的内容
         const quoteDisplay = document.getElementById('quote-display');
         const newQuoteButton = document.getElementById('new-quote');
         const searchInput = document.getElementById('search-input');
@@ -118,21 +89,15 @@
         const logMoodButton = document.getElementById('log-mood');
         const moodHistory = document.getElementById('mood-history');
 
-        let quotes = []; // 将存储所有的金句
-
-        async function loadQuotes() {
-            try {
-                const response = await fetch('quotes.json');
-                quotes = await response.json();
-                displayRandomQuote();
-            } catch (error) {
-                console.error('加载金句失败:', error);
-                quotes = [{ text: "生活不是等待暴风雨过去，而是学会在雨中跳舞。", from: "Unknown" }];
-            }
-        }
+        let quotes = [
+            { text: "生活不是等待暴风雨过去，而是学会在雨中跳舞。", from: "Unknown" },
+            { text: "成功不是最终的，失败也不是致命的：重要的是继续前进的勇气。", from: "Winston Churchill" },
+            { text: "每一个不曾起舞的日子，都是对生命的辜负。", from: "尼采" },
+            { text: "当你感到悲伤时，就去学习一些新东西吧。", from: "Theodore Roosevelt" },
+            { text: "微笑着面对生活，生活也会微笑着面对你。", from: "Unknown" }
+        ];
 
         function displayRandomQuote() {
-            if (quotes.length === 0) return;
             const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
             quoteDisplay.textContent = `${randomQuote.text} - ${randomQuote.from}`;
         }
@@ -173,68 +138,11 @@
             moodHistory.innerHTML = '<h3>心情历史记录</h3>' + moodLogs.map(log => `<p>${log}</p>`).join('');
         }
 
-        // 第二个script标签的内容
         newQuoteButton.addEventListener('click', displayRandomQuote);
         searchButton.addEventListener('click', searchQuotes);
         logMoodButton.addEventListener('click', logMood);
 
         // 页面加载时执行
-        loadQuotes();
-        updateMoodHistory();
-    </script>
-</body>
-</html>
-
-        const quoteDisplay = document.getElementById('quote-display');
-        const newQuoteButton = document.getElementById('new-quote');
-        const searchInput = document.getElementById('search-input');
-        const searchButton = document.getElementById('search-button');
-        const moodSelect = document.getElementById('mood-select');
-        const moodReason = document.getElementById('mood-reason');
-        const logMoodButton = document.getElementById('log-mood');
-        const moodHistory = document.getElementById('mood-history');
-
-        function displayRandomQuote() {
-            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            quoteDisplay.textContent = randomQuote;
-        }
-
-        function searchQuotes() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const matchedQuotes = quotes.filter(quote => quote.toLowerCase().includes(searchTerm));
-            if (matchedQuotes.length > 0) {
-                quoteDisplay.textContent = matchedQuotes[0];
-            } else {
-                quoteDisplay.textContent = "没有找到匹配的金句。";
-            }
-        }
-
-        function logMood() {
-            const mood = moodSelect.value;
-            const reason = moodReason.value;
-            if (mood && reason) {
-                const date = new Date();
-                const moodLog = `${date.toLocaleString()} - 心情：${mood}，原因：${reason}`;
-                let moodLogs = JSON.parse(localStorage.getItem('moodLogs')) || [];
-                moodLogs.push(moodLog);
-                localStorage.setItem('moodLogs', JSON.stringify(moodLogs));
-                updateMoodHistory();
-                moodSelect.value = '';
-                moodReason.value = '';
-            } else {
-                alert('请选择心情并填写原因。');
-            }
-        }
-
-        function updateMoodHistory() {
-            const moodLogs = JSON.parse(localStorage.getItem('moodLogs')) || [];
-            moodHistory.innerHTML = '<h3>心情历史记录</h3>' + moodLogs.map(log => `<p>${log}</p>`).join('');
-        }
-
-        newQuoteButton.addEventListener('click', displayRandomQuote);
-        searchButton.addEventListener('click', searchQuotes);
-        logMoodButton.addEventListener('click', logMood);
-
         displayRandomQuote();
         updateMoodHistory();
     </script>
